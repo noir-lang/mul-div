@@ -65,11 +65,6 @@ yarn install
 
 Plain `nargo test` without `--oracle-resolver` fails on the oracle tests.
 
-`src/benchmarks.nr` holds `#[export]` wrappers for each operation. The benchmark
-workflow measures their circuit size (`nargo export` + `scripts/build-gates-report.sh`)
-and Brillig bytecode size (`nargo export --force-brillig` +
-`scripts/build-brillig-report.sh`).
-
 ## Performance
 
 Standalone circuit consumers use 3,063 gates for u128 floor multiply-divide and
