@@ -13,8 +13,14 @@ jobs:
       - uses: noir-lang/noirup@v0.1.5
         with:
           toolchain: 1.0.0
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v4
         with:
-          components: rustfmt
-      - name: Verify Noir, Rust and isolated checkout consumption
-        run: python3 scripts/verify.py --no-benchmarks
+          node-version: 22
+      - name: Install oracle server dependencies
+        run: |
+          corepack enable
+          yarn install --immutable
+      - name: Check formatting
+        run: nargo fmt --check
+      - name: Run tests
+        run: ./scripts/run.sh --deny-warnings

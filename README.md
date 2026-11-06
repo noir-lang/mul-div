@@ -43,42 +43,38 @@ nonzero denominator. Quotient and remainder satisfy `a*b = q*d+r` and `r < d`.
 
 The same API works in circuits and unconstrained execution. See
 [arithmetic and constraints](docs/arithmetic.md) for implementation details.
-`examples/ratio` demonstrates floor, remainder and ceiling for proportional asset redemption.
 
-## Verification
+## Testing
 
-Install official Noir **1.0.0**, including `noir-execute`, Rust with edition-2024
-support, and Python **3.11+**. For benchmarks, install Barretenberg **6.0.0**.
-The Aztec **6.0.0** installation below supplies it as `aztec-bb`.
+Tests need Noir **1.0.0** and Node.js. Yarn is pinned by `packageManager` in
+`package.json` and installed through Corepack. `scripts/run.sh` builds and starts the
+oracle server, then runs `nargo test` twice: once on the constrained path and once
+with `--force-brillig` on the unconstrained path.
 
 ```sh
 noirup --version 1.0.0
-curl -fsSL https://install.aztec.network/6.0.0 -o /tmp/install-aztec.sh
-NON_INTERACTIVE=1 bash /tmp/install-aztec.sh
-export PATH="$HOME/.aztec/versions/6.0.0/bin:$PATH"
-python3 scripts/verify.py
+corepack enable
+yarn install
+./scripts/run.sh
 ```
 
-For a Noir/Rust iteration without benchmarks:
+- `library/src/tests.nr` holds fixed boundary and regression cases, with the
+  rejection cases as `should_fail_with` tests.
+- `library/src/oracle_tests.nr` holds parametric tests whose random inputs are
+  compared against an exact JS `BigInt` reference served by `oracle_server.ts`.
+- `library/src/*_constraints.nr` tests supply incorrect witnesses directly to
+  the division verifiers.
 
-```sh
-python3 scripts/verify.py --no-benchmarks
-```
+Plain `nargo test --workspace` without `--oracle-resolver` fails on the oracle tests.
 
-`NARGO`, `NOIR_EXECUTE` and `BB` override executable paths.
-Hegel uses seed 42 by default; set `HEGEL_SEED` to reproduce another run.
-
-Rust/Hegel compares both execution modes against independent BigUint arithmetic.
-Library tests check deliberately incorrect division witnesses. The isolated
-consumer checks dependency resolution. Retain minimized inputs in
-`tests/regressions/`. See [benchmark commands and results](benchmarks/README.md).
+See [benchmark commands and results](benchmarks/README.md) for benchmarks.
 
 ## Performance
 
 Standalone circuit consumers use 3,063 gates for u128 floor multiply-divide and
 2,958 for U256. See [measurement scope and comparisons](docs/performance.md).
 
-CI runs stable tests, benchmarks and a nightly consumer compatibility probe.
+CI runs stable tests, benchmarks and a nightly compatibility probe.
 The manual release-preparation workflow runs checks only. Before publication,
 choose a destination repository and version, test remote installation using the
 `library` directory, and decide whether to keep bigint on `main` or select a fixed

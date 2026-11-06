@@ -1,7 +1,0 @@
-[package]
-name = "division_unconstrained"
-type = "bin"
-compiler_version = "=1.0.0"
-
-[dependencies]
-mul_div = { path = "../../../library" }

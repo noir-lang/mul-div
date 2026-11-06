@@ -6,12 +6,19 @@ on:
 permissions:
   contents: read
 jobs:
-  consumer:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: noir-lang/noirup@v0.1.5
         with:
           toolchain: nightly
-      - name: Probe MulDiv APIs from an isolated consumer
-        run: python3 scripts/test-consumer.py --canary
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install oracle server dependencies
+        run: |
+          corepack enable
+          yarn install --immutable
+      - name: Run tests
+        run: ./scripts/run.sh

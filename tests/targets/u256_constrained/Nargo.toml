@@ -1,8 +1,0 @@
-[package]
-name = "u256_constrained"
-type = "bin"
-compiler_version = "=1.0.0"
-
-[dependencies]
-mul_div = { path = "../../../library" }
-bigint = { git = "https://github.com/noir-lang/bigint", tag = "main" }

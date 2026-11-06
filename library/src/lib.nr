@@ -5,6 +5,9 @@ mod u128_constraints;
 mod u256_constraints;
 mod u256_division;
 
+mod oracle_tests;
+mod tests;
+
 /// Exact multiply-divide with an intermediate twice the operand width.
 /// Rejects zero denominators and results outside Self; never wraps or saturates.
 pub trait MulDiv {

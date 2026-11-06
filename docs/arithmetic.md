@@ -65,5 +65,6 @@ checks its increment before addition.
 
 Private verifier tests supply incorrect quotients, remainders, noncanonical
 encodings and field-congruent integer mismatches without using the honest
-witness generator. Rust/Hegel tests compare public API results against
-independent BigUint references, including normalization and correction regressions.
+witness generator. Oracle-backed `nargo test` tests compare public API results
+against an independent JS `BigInt` reference, and fixed tests cover normalization
+and correction regressions.

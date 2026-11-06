@@ -1,6 +1,0 @@
-a = "7"
-b = "9"
-d = "4"
-expected_q = "15"
-expected_r = "3"
-operation = 0
