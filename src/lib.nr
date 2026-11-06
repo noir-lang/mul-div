@@ -93,9 +93,9 @@ fn wide_ratio_with_remainder() {
 
 #[test]
 fn ceiling_rounding() {
-    assert_eq((7 as u128).mul_div_ceil(9, 4), 16);
-    assert_eq((7 as u128).mul_div_ceil(8, 4), 14);
-    assert_eq((0 as u128).mul_div_ceil(9, 4), 0);
+    assert_eq(7_u128.mul_div_ceil(9, 4), 16);
+    assert_eq(7_u128.mul_div_ceil(8, 4), 14);
+    assert_eq(0_u128.mul_div_ceil(9, 4), 0);
     let m: u128 = 0xffffffffffffffffffffffffffffffff;
     assert_eq(m.mul_div_ceil(1, 1), m);
 }

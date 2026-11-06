@@ -597,82 +597,82 @@ fn u256_boundaries() {
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_0_0_0_rem_rejects() {
-    let _ = (0x0 as u128).mul_div_rem(0x0, 0x0);
+    let _ = 0x0_u128.mul_div_rem(0x0, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_0_0_0_floor_rejects() {
-    let _ = (0x0 as u128).mul_div_floor(0x0, 0x0);
+    let _ = 0x0_u128.mul_div_floor(0x0, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_0_0_0_ceil_rejects() {
-    let _ = (0x0 as u128).mul_div_ceil(0x0, 0x0);
+    let _ = 0x0_u128.mul_div_ceil(0x0, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_0_max_0_rem_rejects() {
-    let _ = (0x0 as u128).mul_div_rem(0xffffffffffffffffffffffffffffffff, 0x0);
+    let _ = 0x0_u128.mul_div_rem(0xffffffffffffffffffffffffffffffff, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_0_max_0_floor_rejects() {
-    let _ = (0x0 as u128).mul_div_floor(0xffffffffffffffffffffffffffffffff, 0x0);
+    let _ = 0x0_u128.mul_div_floor(0xffffffffffffffffffffffffffffffff, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_0_max_0_ceil_rejects() {
-    let _ = (0x0 as u128).mul_div_ceil(0xffffffffffffffffffffffffffffffff, 0x0);
+    let _ = 0x0_u128.mul_div_ceil(0xffffffffffffffffffffffffffffffff, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_max_0_0_rem_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_rem(0x0, 0x0);
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_rem(0x0, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_max_0_0_floor_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_floor(0x0, 0x0);
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_floor(0x0, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_max_0_0_ceil_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_ceil(0x0, 0x0);
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_ceil(0x0, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_1_1_0_rem_rejects() {
-    let _ = (0x1 as u128).mul_div_rem(0x1, 0x0);
+    let _ = 0x1_u128.mul_div_rem(0x1, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_1_1_0_floor_rejects() {
-    let _ = (0x1 as u128).mul_div_floor(0x1, 0x0);
+    let _ = 0x1_u128.mul_div_floor(0x1, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u128_1_1_0_ceil_rejects() {
-    let _ = (0x1 as u128).mul_div_ceil(0x1, 0x0);
+    let _ = 0x1_u128.mul_div_ceil(0x1, 0x0);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_2pow64_2pow64_1_rem_rejects() {
-    let _ = (0x10000000000000000 as u128).mul_div_rem(0x10000000000000000, 0x1);
+    let _ = 0x10000000000000000_u128.mul_div_rem(0x10000000000000000, 0x1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_2pow64_2pow64_1_floor_rejects() {
-    let _ = (0x10000000000000000 as u128).mul_div_floor(0x10000000000000000, 0x1);
+    let _ = 0x10000000000000000_u128.mul_div_floor(0x10000000000000000, 0x1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_2pow64_2pow64_1_ceil_rejects() {
-    let _ = (0x10000000000000000 as u128).mul_div_ceil(0x10000000000000000, 0x1);
+    let _ = 0x10000000000000000_u128.mul_div_ceil(0x10000000000000000, 0x1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_max_max_max_minus_1_rem_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_rem(
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_rem(
         0xffffffffffffffffffffffffffffffff,
         0xfffffffffffffffffffffffffffffffe,
     );
@@ -680,7 +680,7 @@ fn u128_max_max_max_minus_1_rem_rejects() {
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_max_max_max_minus_1_floor_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_floor(
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_floor(
         0xffffffffffffffffffffffffffffffff,
         0xfffffffffffffffffffffffffffffffe,
     );
@@ -688,7 +688,7 @@ fn u128_max_max_max_minus_1_floor_rejects() {
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_max_max_max_minus_1_ceil_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_ceil(
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_ceil(
         0xffffffffffffffffffffffffffffffff,
         0xfffffffffffffffffffffffffffffffe,
     );
@@ -696,23 +696,23 @@ fn u128_max_max_max_minus_1_ceil_rejects() {
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_max_2_1_rem_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_rem(0x2, 0x1);
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_rem(0x2, 0x1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_max_2_1_floor_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_floor(0x2, 0x1);
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_floor(0x2, 0x1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u128_max_2_1_ceil_rejects() {
-    let _ = (0xffffffffffffffffffffffffffffffff as u128).mul_div_ceil(0x2, 0x1);
+    let _ = 0xffffffffffffffffffffffffffffffff_u128.mul_div_ceil(0x2, 0x1);
 }
 
 #[test]
 fn u128_max_minus_1_max_minus_1_max_minus_2_floor_fits() {
     assert_eq(
-        (0xfffffffffffffffffffffffffffffffe as u128).mul_div_rem(
+        0xfffffffffffffffffffffffffffffffe_u128.mul_div_rem(
             0xfffffffffffffffffffffffffffffffe,
             0xfffffffffffffffffffffffffffffffd,
         ),
@@ -722,7 +722,7 @@ fn u128_max_minus_1_max_minus_1_max_minus_2_floor_fits() {
 
 #[test(should_fail_with = "mul_div: ceiling overflow")]
 fn u128_max_minus_1_max_minus_1_max_minus_2_ceil_rejects() {
-    let _ = (0xfffffffffffffffffffffffffffffffe as u128).mul_div_ceil(
+    let _ = 0xfffffffffffffffffffffffffffffffe_u128.mul_div_ceil(
         0xfffffffffffffffffffffffffffffffe,
         0xfffffffffffffffffffffffffffffffd,
     );
@@ -974,42 +974,42 @@ fn u8_boundaries() {
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u8_zero_denominator_rem_rejects() {
-    let _ = (1 as u8).mul_div_rem(1, 0);
+    let _ = 1_u8.mul_div_rem(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u8_zero_denominator_floor_rejects() {
-    let _ = (1 as u8).mul_div_floor(1, 0);
+    let _ = 1_u8.mul_div_floor(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u8_zero_denominator_ceil_rejects() {
-    let _ = (1 as u8).mul_div_ceil(1, 0);
+    let _ = 1_u8.mul_div_ceil(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u8_quotient_overflow_rem_rejects() {
-    let _ = (0xff as u8).mul_div_rem(2, 1);
+    let _ = 0xff_u8.mul_div_rem(2, 1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u8_quotient_overflow_floor_rejects() {
-    let _ = (0xff as u8).mul_div_floor(2, 1);
+    let _ = 0xff_u8.mul_div_floor(2, 1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u8_quotient_overflow_ceil_rejects() {
-    let _ = (0xff as u8).mul_div_ceil(2, 1);
+    let _ = 0xff_u8.mul_div_ceil(2, 1);
 }
 
 #[test]
 fn u8_max_minus_1_squared_floor_fits() {
-    assert_eq((0xfe as u8).mul_div_rem(0xfe, 0xfd), (0xff, 1));
+    assert_eq(0xfe_u8.mul_div_rem(0xfe, 0xfd), (0xff, 1));
 }
 
 #[test(should_fail_with = "mul_div: ceiling overflow")]
 fn u8_ceiling_overflow_rejects() {
-    let _ = (0xfe as u8).mul_div_ceil(0xfe, 0xfd);
+    let _ = 0xfe_u8.mul_div_ceil(0xfe, 0xfd);
 }
 
 /// (a, b, d, floor quotient, remainder, ceiling quotient) for inputs every operation accepts.
@@ -1043,42 +1043,42 @@ fn u16_boundaries() {
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u16_zero_denominator_rem_rejects() {
-    let _ = (1 as u16).mul_div_rem(1, 0);
+    let _ = 1_u16.mul_div_rem(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u16_zero_denominator_floor_rejects() {
-    let _ = (1 as u16).mul_div_floor(1, 0);
+    let _ = 1_u16.mul_div_floor(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u16_zero_denominator_ceil_rejects() {
-    let _ = (1 as u16).mul_div_ceil(1, 0);
+    let _ = 1_u16.mul_div_ceil(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u16_quotient_overflow_rem_rejects() {
-    let _ = (0xffff as u16).mul_div_rem(2, 1);
+    let _ = 0xffff_u16.mul_div_rem(2, 1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u16_quotient_overflow_floor_rejects() {
-    let _ = (0xffff as u16).mul_div_floor(2, 1);
+    let _ = 0xffff_u16.mul_div_floor(2, 1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u16_quotient_overflow_ceil_rejects() {
-    let _ = (0xffff as u16).mul_div_ceil(2, 1);
+    let _ = 0xffff_u16.mul_div_ceil(2, 1);
 }
 
 #[test]
 fn u16_max_minus_1_squared_floor_fits() {
-    assert_eq((0xfffe as u16).mul_div_rem(0xfffe, 0xfffd), (0xffff, 1));
+    assert_eq(0xfffe_u16.mul_div_rem(0xfffe, 0xfffd), (0xffff, 1));
 }
 
 #[test(should_fail_with = "mul_div: ceiling overflow")]
 fn u16_ceiling_overflow_rejects() {
-    let _ = (0xfffe as u16).mul_div_ceil(0xfffe, 0xfffd);
+    let _ = 0xfffe_u16.mul_div_ceil(0xfffe, 0xfffd);
 }
 
 /// (a, b, d, floor quotient, remainder, ceiling quotient) for inputs every operation accepts.
@@ -1112,42 +1112,42 @@ fn u32_boundaries() {
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u32_zero_denominator_rem_rejects() {
-    let _ = (1 as u32).mul_div_rem(1, 0);
+    let _ = 1_u32.mul_div_rem(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u32_zero_denominator_floor_rejects() {
-    let _ = (1 as u32).mul_div_floor(1, 0);
+    let _ = 1_u32.mul_div_floor(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u32_zero_denominator_ceil_rejects() {
-    let _ = (1 as u32).mul_div_ceil(1, 0);
+    let _ = 1_u32.mul_div_ceil(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u32_quotient_overflow_rem_rejects() {
-    let _ = (0xffffffff as u32).mul_div_rem(2, 1);
+    let _ = 0xffffffff_u32.mul_div_rem(2, 1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u32_quotient_overflow_floor_rejects() {
-    let _ = (0xffffffff as u32).mul_div_floor(2, 1);
+    let _ = 0xffffffff_u32.mul_div_floor(2, 1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u32_quotient_overflow_ceil_rejects() {
-    let _ = (0xffffffff as u32).mul_div_ceil(2, 1);
+    let _ = 0xffffffff_u32.mul_div_ceil(2, 1);
 }
 
 #[test]
 fn u32_max_minus_1_squared_floor_fits() {
-    assert_eq((0xfffffffe as u32).mul_div_rem(0xfffffffe, 0xfffffffd), (0xffffffff, 1));
+    assert_eq(0xfffffffe_u32.mul_div_rem(0xfffffffe, 0xfffffffd), (0xffffffff, 1));
 }
 
 #[test(should_fail_with = "mul_div: ceiling overflow")]
 fn u32_ceiling_overflow_rejects() {
-    let _ = (0xfffffffe as u32).mul_div_ceil(0xfffffffe, 0xfffffffd);
+    let _ = 0xfffffffe_u32.mul_div_ceil(0xfffffffe, 0xfffffffd);
 }
 
 /// (a, b, d, floor quotient, remainder, ceiling quotient) for inputs every operation accepts.
@@ -1187,43 +1187,43 @@ fn u64_boundaries() {
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u64_zero_denominator_rem_rejects() {
-    let _ = (1 as u64).mul_div_rem(1, 0);
+    let _ = 1_u64.mul_div_rem(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u64_zero_denominator_floor_rejects() {
-    let _ = (1 as u64).mul_div_floor(1, 0);
+    let _ = 1_u64.mul_div_floor(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: zero denominator")]
 fn u64_zero_denominator_ceil_rejects() {
-    let _ = (1 as u64).mul_div_ceil(1, 0);
+    let _ = 1_u64.mul_div_ceil(1, 0);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u64_quotient_overflow_rem_rejects() {
-    let _ = (0xffffffffffffffff as u64).mul_div_rem(2, 1);
+    let _ = 0xffffffffffffffff_u64.mul_div_rem(2, 1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u64_quotient_overflow_floor_rejects() {
-    let _ = (0xffffffffffffffff as u64).mul_div_floor(2, 1);
+    let _ = 0xffffffffffffffff_u64.mul_div_floor(2, 1);
 }
 
 #[test(should_fail_with = "mul_div: quotient overflow")]
 fn u64_quotient_overflow_ceil_rejects() {
-    let _ = (0xffffffffffffffff as u64).mul_div_ceil(2, 1);
+    let _ = 0xffffffffffffffff_u64.mul_div_ceil(2, 1);
 }
 
 #[test]
 fn u64_max_minus_1_squared_floor_fits() {
     assert_eq(
-        (0xfffffffffffffffe as u64).mul_div_rem(0xfffffffffffffffe, 0xfffffffffffffffd),
+        0xfffffffffffffffe_u64.mul_div_rem(0xfffffffffffffffe, 0xfffffffffffffffd),
         (0xffffffffffffffff, 1),
     );
 }
 
 #[test(should_fail_with = "mul_div: ceiling overflow")]
 fn u64_ceiling_overflow_rejects() {
-    let _ = (0xfffffffffffffffe as u64).mul_div_ceil(0xfffffffffffffffe, 0xfffffffffffffffd);
+    let _ = 0xfffffffffffffffe_u64.mul_div_ceil(0xfffffffffffffffe, 0xfffffffffffffffd);
 }

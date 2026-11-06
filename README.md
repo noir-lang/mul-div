@@ -32,10 +32,10 @@ The `MulDiv` trait is implemented for `u8`, `u16`, `u32`, `u64`, `u128` and bigi
 use bigint::{BigInt, U256};
 use mul_div::MulDiv;
 
-let (q, r) = (7 as u128).mul_div_rem(9, 4);
+let (q, r) = 7_u128.mul_div_rem(9, 4);
 assert_eq(q, 15);
 assert_eq(r, 3);
-assert_eq((7 as u128).mul_div_ceil(9, 4), 16);
+assert_eq(7_u128.mul_div_ceil(9, 4), 16);
 
 let maximum = U256::from_le_bytes([255; 32]);
 assert_eq(maximum.mul_div_floor(maximum, maximum), maximum);
