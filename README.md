@@ -20,7 +20,7 @@ bigint = { git = "https://github.com/noir-lang/bigint", tag = "main" }
 
 ## API
 
-The `MulDiv` trait is implemented for `u128` and bigint's `U256`:
+The `MulDiv` trait is implemented for `u8`, `u16`, `u32`, `u64`, `u128` and bigint's `U256`:
 
 | Method | Result |
 | --- | --- |

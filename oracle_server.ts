@@ -46,6 +46,8 @@ function handleForeignCall(params: ForeignCallInfo[]): ForeignCallResult {
       return mulDivU128(inputs);
     case "mulDivU256":
       return mulDivU256(inputs);
+    case "mulDivSmall":
+      return mulDivSmall(inputs);
     default:
       throw new Error(`Unknown function: ${functionName}`);
   }
@@ -104,6 +106,21 @@ function toBytes(value: bigint): string[] {
 function mulDivU128(inputs: ForeignCallParam[]): ForeignCallResult {
   const [a, b, d] = inputs.map(fromField);
   const result = reference(a, b, d, U128_MAX);
+  return {
+    values: [
+      toField(result.remOk ? 1n : 0n),
+      toField(result.q),
+      toField(result.r),
+      toField(result.ceilOk ? 1n : 0n),
+      toField(result.ceil),
+    ],
+  };
+}
+
+// Unsigned types of at most 64 bits: inputs are (a, b, d, bit width).
+function mulDivSmall(inputs: ForeignCallParam[]): ForeignCallResult {
+  const [a, b, d, bits] = inputs.map(fromField);
+  const result = reference(a, b, d, (1n << bits) - 1n);
   return {
     values: [
       toField(result.remOk ? 1n : 0n),

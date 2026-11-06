@@ -47,6 +47,15 @@ Scaling multiply-adds fit u128 because digits and factor are below B and carry
 is below the factor. Digit subtraction adds B before subtracting the other digit
 and borrow. A final assertion rejects subtraction underflow.
 
+## u8, u16, u32 and u64
+
+For operands of at most 64 bits the full product fits in a `u128`, so an
+unconstrained hint computes `(q, r)` with native `u128` division and returns them
+as the operand type. That return range-checks both to the type's width. The circuit
+checks `d != 0`, `r < d` and the single field equation `a*b = q*d + r`. Every term
+is below 2^128, so the equation cannot wrap the field and holds over the integers.
+Together with the range checks, it fixes the unique quotient and remainder.
+
 ## Circuit verification
 
 An `unsafe` call from constrained code obtains untrusted quotient and remainder

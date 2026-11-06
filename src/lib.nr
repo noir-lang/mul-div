@@ -1,5 +1,6 @@
 use bigint::{BigInt, U256};
 
+mod small_integers;
 mod u128_division;
 mod u128_constraints;
 mod u256_constraints;
