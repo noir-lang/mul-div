@@ -46,14 +46,12 @@ The same API works in circuits and unconstrained execution. See
 
 ## Testing
 
-Tests need Noir **1.0.0** and Node.js. Yarn is pinned by `packageManager` in
-`package.json` and installed through Corepack. `scripts/run.sh` builds and starts the
+Tests need Noir **1.0.0**, Node.js and Yarn. `scripts/run.sh` builds and starts the
 oracle server, then runs `nargo test` twice: once on the constrained path and once
 with `--force-brillig` on the unconstrained path.
 
 ```sh
 noirup --version 1.0.0
-corepack enable
 yarn install
 ./scripts/run.sh
 ```
