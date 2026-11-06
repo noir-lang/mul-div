@@ -1,3 +1,7 @@
-[workspace]
-members = ["library"]
-default-member = "library"
+[package]
+name = "mul_div"
+type = "lib"
+compiler_version = ">=1.0.0"
+
+[dependencies]
+bigint = { git = "https://github.com/noir-lang/bigint", tag = "main" }

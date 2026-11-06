@@ -33,8 +33,9 @@ def main():
     programs = []
     with tempfile.TemporaryDirectory(prefix='mul-div-gates-') as directory:
         workspace = Path(directory)
-        shutil.copytree(ROOT / 'library', workspace / 'library',
-                        ignore=shutil.ignore_patterns('target', '__pycache__'))
+        library = workspace / 'library'
+        shutil.copytree(ROOT / 'src', library / 'src')
+        shutil.copy(ROOT / 'Nargo.toml', library / 'Nargo.toml')
         for operation, (inputs, output, call) in OPERATIONS.items():
             package = workspace / operation
             (package / 'src').mkdir(parents=True)

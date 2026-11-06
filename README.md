@@ -9,7 +9,7 @@ From a sibling checkout, add these dependencies to your `Nargo.toml`:
 
 ```toml
 [dependencies]
-mul_div = { path = "../mul-div/library" }
+mul_div = { path = "../mul-div" }
 bigint = { git = "https://github.com/noir-lang/bigint", tag = "main" }
 ```
 
@@ -56,14 +56,14 @@ yarn install
 ./scripts/run.sh
 ```
 
-- `library/src/tests.nr` holds fixed boundary and regression cases, with the
+- `src/tests.nr` holds fixed boundary and regression cases, with the
   rejection cases as `should_fail_with` tests.
-- `library/src/oracle_tests.nr` holds parametric tests whose random inputs are
+- `src/oracle_tests.nr` holds parametric tests whose random inputs are
   compared against an exact JS `BigInt` reference served by `oracle_server.ts`.
-- `library/src/*_constraints.nr` tests supply incorrect witnesses directly to
+- `src/*_constraints.nr` tests supply incorrect witnesses directly to
   the division verifiers.
 
-Plain `nargo test --workspace` without `--oracle-resolver` fails on the oracle tests.
+Plain `nargo test` without `--oracle-resolver` fails on the oracle tests.
 
 See [benchmark commands and results](benchmarks/README.md) for benchmarks.
 
@@ -74,8 +74,7 @@ Standalone circuit consumers use 3,063 gates for u128 floor multiply-divide and
 
 CI runs stable tests, benchmarks and a nightly compatibility probe.
 The manual release-preparation workflow runs checks only. Before publication,
-choose a destination repository and version, test remote installation using the
-`library` directory, and decide whether to keep bigint on `main` or select a fixed
+choose a destination repository and version, test remote installation, and decide whether to keep bigint on `main` or select a fixed
 upstream tag. Release automation is not configured.
 
 Based on [noir-library-starter](https://github.com/noir-lang/noir-library-starter).

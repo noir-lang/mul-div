@@ -71,7 +71,7 @@ def main():
             (package / 'Nargo.toml').write_text(
                 f'[package]\nname = "{name}"\ntype = "bin"\ncompiler_version = "=1.0.0"\n'
                 '[dependencies]\n'
-                f'mul_div = {{ path = {json.dumps(str(ROOT / "library"))} }}\n'
+                f'mul_div = {{ path = {json.dumps(str(ROOT))} }}\n'
                 + bigint_dependency())
             implementation = 'mul_div' if args.width == 128 else '<U256 as mul_div::MulDiv>'
             source = adapter.replace('IMPLEMENTATION', 'baseline' if name == 'baseline' else implementation)

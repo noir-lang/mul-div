@@ -24,5 +24,5 @@ for _ in $(seq 1 30); do
   sleep 0.5
 done
 
-nargo test --workspace --oracle-resolver "http://localhost:${PORT}" "$@"
-nargo test --workspace --oracle-resolver "http://localhost:${PORT}" --force-brillig "$@"
+nargo test --oracle-resolver "http://localhost:${PORT}" "$@"
+nargo test --oracle-resolver "http://localhost:${PORT}" --force-brillig "$@"

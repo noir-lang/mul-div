@@ -28,7 +28,7 @@ def require_backend(version):
 
 
 def bigint_dependency():
-    manifest = tomllib.loads((ROOT / 'library/Nargo.toml').read_text())
+    manifest = tomllib.loads((ROOT / 'Nargo.toml').read_text())
     dependency = manifest['dependencies']['bigint']
     fields = ', '.join(f'{key} = {json.dumps(value)}' for key, value in dependency.items())
     return f'bigint = {{ {fields} }}\n'
@@ -36,8 +36,8 @@ def bigint_dependency():
 
 def source_hash():
     digest = hashlib.sha256()
-    for path in sorted((ROOT / 'library').rglob('*')):
-        if path.is_file() and (path.suffix == '.nr' or path.name == 'Nargo.toml'):
+    for path in [ROOT / 'Nargo.toml', *sorted((ROOT / 'src').rglob('*.nr'))]:
+        if path.is_file():
             digest.update(str(path.relative_to(ROOT)).encode() + b'\0')
             digest.update(path.read_bytes() + b'\0')
     return digest.hexdigest()

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Oracle server for the differential tests in `library/src/oracle_tests.nr`.
+// Oracle server for the differential tests in `src/oracle_tests.nr`.
 // Computes `a * b / d` exactly with JS BigInt, as an implementation independent
 // of the library under test.
 
