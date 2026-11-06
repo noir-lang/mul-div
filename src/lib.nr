@@ -85,56 +85,23 @@ impl MulDiv for U256 {
 #[test]
 fn wide_ratio_with_remainder() {
     // (2^64 + 1)^2 / 2^64 = 2^64 + 2, remainder 1.
-    assert_eq(
-        mul_div_rem(
-            0x10000000000000001,
-            0x10000000000000001,
-            0x10000000000000000,
-        ),
-        (0x10000000000000002, 1),
-    );
-    assert_eq(
-        mul_div_floor(
-            0x10000000000000001,
-            0x10000000000000001,
-            0x10000000000000000,
-        ),
-        0x10000000000000002,
-    );
-}
-
-/// Returns floor(a*b/d), preserving the full intermediate product.
-/// Fails when d is zero or the quotient exceeds u128::MAX.
-pub fn mul_div_floor(a: u128, b: u128, d: u128) -> u128 {
-    a.mul_div_floor(b, d)
-}
-
-/// Returns (q, r) with a*b = q*d + r and 0 <= r < d over the integers.
-/// Fails when d is zero or q exceeds u128::MAX.
-pub fn mul_div_rem(a: u128, b: u128, d: u128) -> (u128, u128) {
-    a.mul_div_rem(b, d)
+    let a: u128 = 0x10000000000000001;
+    assert_eq(a.mul_div_rem(a, 0x10000000000000000), (0x10000000000000002, 1));
+    assert_eq(a.mul_div_floor(a, 0x10000000000000000), 0x10000000000000002);
 }
 
 #[test]
 fn ceiling_rounding() {
-    assert_eq(mul_div_ceil(7, 9, 4), 16);
-    assert_eq(mul_div_ceil(7, 8, 4), 14);
-    assert_eq(mul_div_ceil(0, 9, 4), 0);
-    assert_eq(
-        mul_div_ceil(0xffffffffffffffffffffffffffffffff, 1, 1),
-        0xffffffffffffffffffffffffffffffff,
-    );
-}
-
-/// Returns ceil(a*b/d), preserving the full intermediate product.
-/// Fails when d is zero or the rounded quotient exceeds u128::MAX.
-pub fn mul_div_ceil(a: u128, b: u128, d: u128) -> u128 {
-    a.mul_div_ceil(b, d)
+    assert_eq((7 as u128).mul_div_ceil(9, 4), 16);
+    assert_eq((7 as u128).mul_div_ceil(8, 4), 14);
+    assert_eq((0 as u128).mul_div_ceil(9, 4), 0);
+    let m: u128 = 0xffffffffffffffffffffffffffffffff;
+    assert_eq(m.mul_div_ceil(1, 1), m);
 }
 
 #[test(should_fail_with = "mul_div: ceiling overflow")]
 fn ceiling_only_overflow() {
     // (MAX - 1)^2 = MAX * (MAX - 2) + 1.
     let m: u128 = 0xffffffffffffffffffffffffffffffff;
-    let _ = mul_div_ceil(m - 1, m - 1, m - 2);
+    let _ = (m - 1).mul_div_ceil(m - 1, m - 2);
 }

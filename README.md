@@ -15,13 +15,13 @@ bigint = { git = "https://github.com/noir-lang/bigint", tag = "main" }
 
 ## API
 
-| Free function | Result |
-| --- | --- |
-| `mul_div_floor(a: u128, b: u128, d: u128)` | Floor quotient as u128 |
-| `mul_div_ceil(a: u128, b: u128, d: u128)` | Ceiling quotient as u128 |
-| `mul_div_rem(a: u128, b: u128, d: u128)` | Floor quotient and remainder as `(u128, u128)` |
+The `MulDiv` trait is implemented for `u128` and bigint's `U256`:
 
-`MulDiv` provides the three division methods for both u128 and bigint U256:
+| Method | Result |
+| --- | --- |
+| `a.mul_div_floor(b, d)` | `floor(a * b / d)` |
+| `a.mul_div_ceil(b, d)` | `ceil(a * b / d)` |
+| `a.mul_div_rem(b, d)` | Floor quotient and remainder `(q, r)` |
 
 ```noir
 use bigint::{BigInt, U256};
