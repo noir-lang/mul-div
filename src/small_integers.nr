@@ -1,145 +1,104 @@
 //! `MulDiv` for unsigned types of at most 64 bits.
 //!
 //! For these widths the full product fits in a `u128`, so an unconstrained hint
-//! computes `(q, r)` with native `u128` division. Returning them as `Self` range-
-//! checks both to the type's width. The constrained check is then a single `Field`
-//! equation `a * b == q * d + r` with `r < d`. Every term is below 2^128, far under
-//! the field modulus, so the equation holds over the integers and fixes `(q, r)`.
+//! computes `(q, r)` with native `u128` division. Returning them as `T` range-checks
+//! both to the type's width. The constrained check is then a single `Field` equation
+//! `a * b == q * d + r` with `r < d`. Every term is below 2^128, far under the field
+//! modulus, so the equation holds over the integers and fixes `(q, r)`.
 
 use crate::MulDiv;
+use std::convert::AsPrimitive;
 
-unconstrained fn u8_div_rem(a: u8, b: u8, d: u8) -> (u8, u8) {
+unconstrained fn div_rem_hint<T>(a: T, b: T, d: T, max: T) -> (T, T)
+where
+    T: AsPrimitive<u128>,
+    u128: AsPrimitive<T>,
+{
+    let d: u128 = d.as_();
     assert(d != 0, "mul_div: zero denominator");
-    let product = (a as u128) * (b as u128);
-    let q = product / (d as u128);
-    assert(q <= 0xff, "mul_div: quotient overflow");
-    (q as u8, (product % (d as u128)) as u8)
+    let a: u128 = a.as_();
+    let b: u128 = b.as_();
+    let product = a * b;
+    let q = product / d;
+    let max: u128 = max.as_();
+    assert(q <= max, "mul_div: quotient overflow");
+    (q.as_(), (product % d).as_())
+}
+
+fn mul_div_rem<T>(a: T, b: T, d: T, max: T) -> (T, T)
+where
+    T: AsPrimitive<u128> + AsPrimitive<Field> + Eq + std::ops::Sub + From<u8>,
+    u128: AsPrimitive<T>,
+{
+    // Safety: constrained callers check the integer relation and bounds below.
+    let (q, r) = unsafe { div_rem_hint(a, b, d, max) };
+    if !std::runtime::is_unconstrained() {
+        let a_field: Field = a.as_();
+        let b_field: Field = b.as_();
+        let d_field: Field = d.as_();
+        let q_field: Field = q.as_();
+        let r_field: Field = r.as_();
+        assert(d != T::from(0), "mul_div: zero denominator");
+        // Checked subtraction enforces `r < d`. `r < d` on a generic `T` would go
+        // through `Ord::cmp`, which costs a second comparison in the circuit.
+        let _ = d - r - T::from(1);
+        assert_eq(a_field * b_field, q_field * d_field + r_field);
+    }
+    (q, r)
+}
+
+fn mul_div_ceil<T>(a: T, b: T, d: T, max: T) -> T
+where
+    T: AsPrimitive<u128> + AsPrimitive<Field> + Eq + std::ops::Add + std::ops::Sub + From<u8>,
+    u128: AsPrimitive<T>,
+{
+    let (q, r) = mul_div_rem(a, b, d, max);
+    let zero: T = T::from(0);
+    if r == zero {
+        q
+    } else {
+        // `q <= max` already holds, so `q != max` is `q < max` without an `Ord` comparison.
+        assert(q != max, "mul_div: ceiling overflow");
+        q + T::from(1)
+    }
 }
 
 impl MulDiv for u8 {
     fn mul_div_rem(self, rhs: Self, denominator: Self) -> (Self, Self) {
-        // Safety: constrained callers check the integer relation and bounds below.
-        let (q, r) = unsafe { u8_div_rem(self, rhs, denominator) };
-        if !std::runtime::is_unconstrained() {
-            assert(denominator != 0, "mul_div: zero denominator");
-            assert(r < denominator, "mul_div: remainder out of range");
-            assert_eq(
-                (self as Field) * (rhs as Field),
-                (q as Field) * (denominator as Field) + (r as Field),
-            );
-        }
-        (q, r)
+        mul_div_rem(self, rhs, denominator, 0xff)
     }
 
     fn mul_div_ceil(self, rhs: Self, denominator: Self) -> Self {
-        let (q, r) = self.mul_div_rem(rhs, denominator);
-        if r == 0 {
-            q
-        } else {
-            assert(q < 0xff, "mul_div: ceiling overflow");
-            q + 1
-        }
+        mul_div_ceil(self, rhs, denominator, 0xff)
     }
-}
-
-unconstrained fn u16_div_rem(a: u16, b: u16, d: u16) -> (u16, u16) {
-    assert(d != 0, "mul_div: zero denominator");
-    let product = (a as u128) * (b as u128);
-    let q = product / (d as u128);
-    assert(q <= 0xffff, "mul_div: quotient overflow");
-    (q as u16, (product % (d as u128)) as u16)
 }
 
 impl MulDiv for u16 {
     fn mul_div_rem(self, rhs: Self, denominator: Self) -> (Self, Self) {
-        // Safety: constrained callers check the integer relation and bounds below.
-        let (q, r) = unsafe { u16_div_rem(self, rhs, denominator) };
-        if !std::runtime::is_unconstrained() {
-            assert(denominator != 0, "mul_div: zero denominator");
-            assert(r < denominator, "mul_div: remainder out of range");
-            assert_eq(
-                (self as Field) * (rhs as Field),
-                (q as Field) * (denominator as Field) + (r as Field),
-            );
-        }
-        (q, r)
+        mul_div_rem(self, rhs, denominator, 0xffff)
     }
 
     fn mul_div_ceil(self, rhs: Self, denominator: Self) -> Self {
-        let (q, r) = self.mul_div_rem(rhs, denominator);
-        if r == 0 {
-            q
-        } else {
-            assert(q < 0xffff, "mul_div: ceiling overflow");
-            q + 1
-        }
+        mul_div_ceil(self, rhs, denominator, 0xffff)
     }
-}
-
-unconstrained fn u32_div_rem(a: u32, b: u32, d: u32) -> (u32, u32) {
-    assert(d != 0, "mul_div: zero denominator");
-    let product = (a as u128) * (b as u128);
-    let q = product / (d as u128);
-    assert(q <= 0xffffffff, "mul_div: quotient overflow");
-    (q as u32, (product % (d as u128)) as u32)
 }
 
 impl MulDiv for u32 {
     fn mul_div_rem(self, rhs: Self, denominator: Self) -> (Self, Self) {
-        // Safety: constrained callers check the integer relation and bounds below.
-        let (q, r) = unsafe { u32_div_rem(self, rhs, denominator) };
-        if !std::runtime::is_unconstrained() {
-            assert(denominator != 0, "mul_div: zero denominator");
-            assert(r < denominator, "mul_div: remainder out of range");
-            assert_eq(
-                (self as Field) * (rhs as Field),
-                (q as Field) * (denominator as Field) + (r as Field),
-            );
-        }
-        (q, r)
+        mul_div_rem(self, rhs, denominator, 0xffffffff)
     }
 
     fn mul_div_ceil(self, rhs: Self, denominator: Self) -> Self {
-        let (q, r) = self.mul_div_rem(rhs, denominator);
-        if r == 0 {
-            q
-        } else {
-            assert(q < 0xffffffff, "mul_div: ceiling overflow");
-            q + 1
-        }
+        mul_div_ceil(self, rhs, denominator, 0xffffffff)
     }
-}
-
-unconstrained fn u64_div_rem(a: u64, b: u64, d: u64) -> (u64, u64) {
-    assert(d != 0, "mul_div: zero denominator");
-    let product = (a as u128) * (b as u128);
-    let q = product / (d as u128);
-    assert(q <= 0xffffffffffffffff, "mul_div: quotient overflow");
-    (q as u64, (product % (d as u128)) as u64)
 }
 
 impl MulDiv for u64 {
     fn mul_div_rem(self, rhs: Self, denominator: Self) -> (Self, Self) {
-        // Safety: constrained callers check the integer relation and bounds below.
-        let (q, r) = unsafe { u64_div_rem(self, rhs, denominator) };
-        if !std::runtime::is_unconstrained() {
-            assert(denominator != 0, "mul_div: zero denominator");
-            assert(r < denominator, "mul_div: remainder out of range");
-            assert_eq(
-                (self as Field) * (rhs as Field),
-                (q as Field) * (denominator as Field) + (r as Field),
-            );
-        }
-        (q, r)
+        mul_div_rem(self, rhs, denominator, 0xffffffffffffffff)
     }
 
     fn mul_div_ceil(self, rhs: Self, denominator: Self) -> Self {
-        let (q, r) = self.mul_div_rem(rhs, denominator);
-        if r == 0 {
-            q
-        } else {
-            assert(q < 0xffffffffffffffff, "mul_div: ceiling overflow");
-            q + 1
-        }
+        mul_div_ceil(self, rhs, denominator, 0xffffffffffffffff)
     }
 }
