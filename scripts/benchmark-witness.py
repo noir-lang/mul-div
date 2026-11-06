@@ -23,7 +23,7 @@ def main():
         parser.error('use at least three repetitions')
     nargo = os.environ.get('NARGO', 'nargo')
     executor = os.environ.get('NOIR_EXECUTE', 'noir-execute')
-    backend = os.environ.get('BB', 'aztec-bb')
+    backend = os.environ.get('BB', 'bb')
     versions = {name: run([tool, '--version']) for name, tool in
                 [('compiler', nargo), ('executor', executor), ('backend', backend)]}
     require_noir(versions['compiler'])

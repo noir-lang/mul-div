@@ -16,11 +16,11 @@ jobs:
       - uses: noir-lang/noirup@v0.1.5
         with:
           toolchain: 1.0.0
-      - name: Install pinned Aztec toolchain
+      - name: Install Barretenberg
         run: |
-          curl -fsSL https://install.aztec.network/6.0.0 -o /tmp/install-aztec.sh
-          NON_INTERACTIVE=1 bash /tmp/install-aztec.sh
-          echo "$HOME/.aztec/versions/6.0.0/bin" >> "$GITHUB_PATH"
+          curl -L https://bbup.aztec.network | bash
+          ~/.bb/bbup -v 6.0.0
+          echo "$HOME/.bb" >> "$GITHUB_PATH"
       - name: Measure MulDiv circuit gates
         run: python3 scripts/benchmark.py
       - name: Compare constrained witness execution with bigint baseline

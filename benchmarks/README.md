@@ -1,8 +1,7 @@
 # Benchmarks
 
-Use official Noir **1.0.0**, including `noir-execute`, and Barretenberg **6.0.0**.
-Aztec **6.0.0** supplies the backend as `aztec-bb`. Installation is documented in the
-[README](../README.md). Python **3.11+** is required.
+Use official Noir **1.0.0**, including `noir-execute`, and Barretenberg **6.0.0**
+(`bbup -v 6.0.0`). Python **3.11+** is required.
 
 ```sh
 python3 scripts/benchmark.py
@@ -11,7 +10,7 @@ python3 scripts/benchmark-witness.py --width 256
 ```
 
 `NARGO`, `NOIR_EXECUTE` and `BB` override executable paths.
-The default backend is `aztec-bb`. Circuit measurement uses the `evm` verifier
+Circuit measurement uses the `evm` verifier
 target.
 
 ## Retained evidence

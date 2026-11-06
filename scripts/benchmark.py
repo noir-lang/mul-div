@@ -25,7 +25,7 @@ for method in ['mul_div_floor', 'mul_div_rem', 'mul_div_ceil']:
 
 def main():
     nargo = os.environ.get('NARGO', 'nargo')
-    backend = os.environ.get('BB', 'aztec-bb')
+    backend = os.environ.get('BB', 'bb')
     compiler = run([nargo, '--version'])
     backend_version = run([backend, '--version'])
     require_noir(compiler)
