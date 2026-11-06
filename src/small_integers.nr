@@ -27,7 +27,7 @@ where
 
 fn mul_div_rem<T>(a: T, b: T, d: T, max: T) -> (T, T)
 where
-    T: AsPrimitive<u128> + AsPrimitive<Field> + Eq + std::ops::Sub + From<u8>,
+    T: AsPrimitive<u128> + AsPrimitive<Field> + Eq + Ord + From<u8>,
     u128: AsPrimitive<T>,
 {
     // Safety: constrained callers check the integer relation and bounds below.
@@ -39,9 +39,7 @@ where
         let q_field: Field = q.as_();
         let r_field: Field = r.as_();
         assert(d != T::from(0), "mul_div: zero denominator");
-        // Checked subtraction enforces `r < d`. `r < d` on a generic `T` would go
-        // through `Ord::cmp`, which costs a second comparison in the circuit.
-        let _ = d - r - T::from(1);
+        assert(r < d, "mul_div: remainder out of range");
         assert_eq(a_field * b_field, q_field * d_field + r_field);
     }
     (q, r)
@@ -49,7 +47,7 @@ where
 
 fn mul_div_ceil<T>(a: T, b: T, d: T, max: T) -> T
 where
-    T: AsPrimitive<u128> + AsPrimitive<Field> + Eq + std::ops::Add + std::ops::Sub + From<u8>,
+    T: AsPrimitive<u128> + AsPrimitive<Field> + Eq + Ord + std::ops::Add + From<u8>,
     u128: AsPrimitive<T>,
 {
     let (q, r) = mul_div_rem(a, b, d, max);
@@ -57,8 +55,7 @@ where
     if r == zero {
         q
     } else {
-        // `q <= max` already holds, so `q != max` is `q < max` without an `Ord` comparison.
-        assert(q != max, "mul_div: ceiling overflow");
+        assert(q < max, "mul_div: ceiling overflow");
         q + T::from(1)
     }
 }
