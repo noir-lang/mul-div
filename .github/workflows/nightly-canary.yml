@@ -1,24 +1,49 @@
-name: Noir nightly compatibility probe
+name: Noir Nightly Canary
+
 on:
   schedule:
-    - cron: '0 9 * * *'
+    # Run a check at 9 AM UTC
+    - cron: "0 9 * * *"
   workflow_dispatch:
+
 permissions:
   contents: read
+  issues: write
+
 jobs:
   test:
+    name: Test on Nargo Nightly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: noir-lang/noirup@v0.1.5
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Install Nargo
+        uses: noir-lang/noirup@v0.1.5
         with:
           toolchain: nightly
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install oracle server dependencies
+
+      - name: Install dependencies
         run: |
           corepack enable
           yarn install --immutable
-      - name: Run tests
+
+      - name: Run all tests (including oracle tests)
         run: ./scripts/run.sh
+
+      - name: Alert on failure
+        uses: JasonEtco/create-an-issue@v2
+        if: ${{ failure() }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          update_existing: true
+          filename: .github/NIGHTLY_CANARY_DIED.md
+      
