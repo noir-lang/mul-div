@@ -65,7 +65,10 @@ yarn install
 
 Plain `nargo test` without `--oracle-resolver` fails on the oracle tests.
 
-See [benchmark commands and results](benchmarks/README.md) for benchmarks.
+`src/benchmarks.nr` holds `#[export]` wrappers for each operation. The benchmark
+workflow measures their circuit size (`nargo export` + `scripts/build-gates-report.sh`)
+and Brillig bytecode size (`nargo export --force-brillig` +
+`scripts/build-brillig-report.sh`).
 
 ## Performance
 

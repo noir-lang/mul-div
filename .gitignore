@@ -1,6 +1,9 @@
 /.scratch/
 target
-**/__pycache__/
+export
+gates_report.json
+brillig_report.json
+benchmark-*.json
 node_modules
 dist
 .yarn/*

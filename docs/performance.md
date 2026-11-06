@@ -1,9 +1,10 @@
 # Performance measurements
 
-Circuits use official Noir 1.0.0 and Barretenberg 6.0.0 with the `evm` verifier
-target.
-Raw reports retain tool identities, operands and source hashes. See
-[benchmark setup](../benchmarks/README.md) to reproduce measurements.
+A one-off comparison of this library against the general `bigint` multiply-divide
+it specialises, measured with Noir 1.0.0 and Barretenberg 6.0.0 (`evm` verifier
+target) against bigint commits `bacd1c0` (u128) and `9248d54` (U256). These figures
+are a dated record and are not regenerated; current circuit and Brillig sizes come
+from the benchmark workflow (`src/benchmarks.nr`).
 
 ## Circuit gates
 
@@ -24,8 +25,8 @@ Circuit size is input-independent for a given adapter. It is not a proof time or
 
 ## Constrained execution time
 
-Each sample executes eight precompiled calls with independent Python expected-result
-assertions. Runs use two warmups and 15 alternating samples per implementation.
+Each sample executed eight precompiled calls with independently computed
+expected-result assertions. Runs use two warmups and 15 alternating samples per implementation.
 These retained results came from separate u128/U256 runs on an AMD EPYC 7R13.
 
 | Type | Baseline median | Specialized median | Reduction |
@@ -37,7 +38,3 @@ Timings include CLI startup, artifact/input loading and ACVM witness execution.
 They exclude compilation, gate counting, witness serialization and proving.
 They depend on machine/load and do not isolate the division helper. Batch gates
 include output assertions and differ from standalone counts.
-
-Reports preserve historical observations. Current scripts import bigint from
-upstream `main`, which can advance. Match dependency versions, toolchains,
-adapters and operands before comparing new results with retained reports.

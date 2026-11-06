@@ -5,6 +5,7 @@ mod u128_constraints;
 mod u256_constraints;
 mod u256_division;
 
+mod benchmarks;
 mod oracle_tests;
 mod tests;
 
