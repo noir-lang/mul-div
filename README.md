@@ -3,9 +3,14 @@
 Exact unsigned multiply-divide for Noir, with constrained and unconstrained
 execution. Licensed under Apache-2.0.
 
+## Noir Version Compatibility
+
+This library requires Noir **v1.0.0** or later.
+
 ## Installation
 
-From a sibling checkout, add these dependencies to your `Nargo.toml`:
+`mul-div` and its `bigint` dependency are private repositories, so you need read
+access to both. From a sibling checkout, add these dependencies to your `Nargo.toml`:
 
 ```toml
 [dependencies]
@@ -67,12 +72,7 @@ Plain `nargo test` without `--oracle-resolver` fails on the oracle tests.
 
 ## Performance
 
-Standalone circuit consumers use 3,063 gates for u128 floor multiply-divide and
-2,958 for U256. See [measurement scope and comparisons](docs/performance.md).
-
-CI runs stable tests, benchmarks and a nightly compatibility probe.
-The manual release-preparation workflow runs checks only. Before publication,
-choose a destination repository and version, test remote installation, and decide whether to keep bigint on `main` or select a fixed
-upstream tag. Release automation is not configured.
+See [performance measurements](docs/performance.md) for a comparison with bigint's
+general multiply-divide.
 
 Based on [noir-library-starter](https://github.com/noir-lang/noir-library-starter).
