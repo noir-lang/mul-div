@@ -1,5 +1,12 @@
 # mul-div
 
+> [!WARNING]
+> **This library is experimental software. It has not been audited and is not guaranteed to be secure. Expect bugs!**
+>
+> mul-div is provided "as is", without warranty of any kind (see [LICENSE](LICENSE)). Bugs in this library can lead to under-constrained circuits, allowing invalid proofs to be accepted. Do not rely on it to protect real assets or sensitive data without your own independent review.
+>
+> If you find a vulnerability, please **do not** open a public issue. Report it privately via [GitHub's "Report a vulnerability"](https://github.com/noir-lang/mul-div/security/advisories/new) form instead.
+
 Exact unsigned multiply-divide for Noir, with constrained and unconstrained
 execution. Licensed under Apache-2.0.
 
