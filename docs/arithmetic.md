@@ -62,24 +62,28 @@ An `unsafe` call from constrained code obtains untrusted quotient and remainder
 witnesses. The constrained path enforces a nonzero denominator, `r < d`, canonical
 values within the result width, and the full integer relation `a*b - q*d - r = 0`.
 
-A field equality alone would allow incorrect witnesses differing by a multiple of
-the field modulus p, because products can exceed it. The u128 verifier adds a
-second congruence: with every operand below 2^128, `D = a*b - q*d - r` satisfies
-`|D| < 2^257`. It checks `D = 0` once as a native field equation (mod p) and once
-on the low 14-bit limbs of the five values (mod 2^14). Each value is split as
-`x = 2^14*hi + lo` with `lo < 2^14` and `hi < 2^114`, which fixes `lo = x mod 2^14`.
-Since p is odd, D is a multiple of `2^14 * p > 2^257`, so `D = 0`. The 14-bit limb
-width reuses the range-check table that u128 values already need. The U256 verifier
-uses bigint's `evaluate_quadratic_expression`, whose limb and bounded carry
-constraints enforce the integer relation. Assertions inside the unconstrained
-helper do not establish circuit soundness.
+Products can exceed the field modulus p, so a field equality alone would allow
+incorrect witnesses whose `a*b - q*d - r` is a nonzero multiple of p. Each verifier
+closes that gap differently. Assertions inside the unconstrained helper do not
+establish circuit soundness.
+
+The u128 verifier checks the relation twice. With every operand below 2^128,
+`D = a*b - q*d - r` satisfies `|D| < 2^257`. It checks `D = 0` once as a native field
+equation (mod p) and once on the low 14-bit limbs of the five values (mod 2^14). Each
+value is split as `x = 2^14*hi + lo` with `lo < 2^14` and `hi < 2^114`, which fixes
+`lo = x mod 2^14`. Since p is odd, D is a multiple of `2^14 * p > 2^257`, so `D = 0`.
+The 14-bit limb width reuses the range-check table that u128 values already need.
+
+The U256 verifier uses bigint's `evaluate_quadratic_expression`, whose limb and
+bounded carry constraints enforce the integer relation.
 
 For nonzero d, these conditions uniquely determine q and r. An overflowing
 quotient has no valid in-range witness. Ceiling consumes the checked pair and
 checks its increment before addition.
 
 Private verifier tests supply incorrect quotients, remainders, noncanonical
-encodings and field-congruent integer mismatches without using the honest
-witness generator. Oracle-backed `nargo test` tests compare public API results
-against an independent JS `BigInt` reference, and fixed tests cover normalization
-and correction regressions.
+encodings, field-congruent integer mismatches, limb-congruent field mismatches and
+dishonest u128 limb splits without using the honest witness generator.
+Oracle-backed `nargo test` tests compare public API results against an independent
+JS `BigInt` reference, and fixed tests cover normalization and correction
+regressions.
