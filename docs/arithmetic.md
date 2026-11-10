@@ -2,7 +2,7 @@
 
 Multiply-divide computes quotient and remainder with specialized unconstrained
 helpers, then verifies their integer relation when called from constrained code.
-The public API exposes u128 and bigint U256. Temporary representations stay private.
+The public API exposes u8 through u128 and bigint U256. Temporary representations stay private.
 
 ## u128 computation
 
@@ -62,11 +62,17 @@ An `unsafe` call from constrained code obtains untrusted quotient and remainder
 witnesses. The constrained path enforces a nonzero denominator, `r < d`, canonical
 values within the result width, and the full integer relation `a*b - q*d - r = 0`.
 
-Both verifiers use bigint's `evaluate_quadratic_expression`. Its limb and bounded
-carry constraints enforce the integer relation even when products exceed the
-field modulus. A field equality alone would allow incorrect witnesses differing
-by a multiple of that modulus. Assertions inside the unconstrained helper do not
-establish circuit soundness.
+A field equality alone would allow incorrect witnesses differing by a multiple of
+the field modulus p, because products can exceed it. The u128 verifier adds a
+second congruence: with every operand below 2^128, `D = a*b - q*d - r` satisfies
+`|D| < 2^257`. It checks `D = 0` once as a native field equation (mod p) and once
+on the low 14-bit limbs of the five values (mod 2^14). Each value is split as
+`x = 2^14*hi + lo` with `lo < 2^14` and `hi < 2^114`, which fixes `lo = x mod 2^14`.
+Since p is odd, D is a multiple of `2^14 * p > 2^257`, so `D = 0`. The 14-bit limb
+width reuses the range-check table that u128 values already need. The U256 verifier
+uses bigint's `evaluate_quadratic_expression`, whose limb and bounded carry
+constraints enforce the integer relation. Assertions inside the unconstrained
+helper do not establish circuit soundness.
 
 For nonzero d, these conditions uniquely determine q and r. An overflowing
 quotient has no valid in-range witness. Ceiling consumes the checked pair and

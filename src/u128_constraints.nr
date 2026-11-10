@@ -1,21 +1,41 @@
-use bigint::{evaluate_quadratic_expression, U256};
-
-/// Check the unique Euclidean quotient/remainder over integers, not just in Field.
-/// Native u128 parameters and the unconstrained call boundary enforce width bounds;
-/// U256 conversion and bigint's expression verifier also range-check their limbs.
+/// Check the unique Euclidean quotient/remainder over the integers, not just in Field.
+///
+/// With every operand below 2^128, D = a*b - q*d - r satisfies |D| < 2^257. The
+/// relation is checked modulo the field modulus p (one native Field equation) and
+/// modulo 2^14 (on the low 14-bit limbs). Since p is odd, D is then a multiple of
+/// 2^14 * p, which exceeds 2^257 for any field of at least 244 bits, so D = 0.
 pub(crate) fn verify_division(a: u128, b: u128, d: u128, q: u128, r: u128) {
+    assert(std::field::modulus_num_bits() >= 244);
     assert(d != 0, "mul_div: zero denominator");
     assert(r < d, "mul_div: remainder out of range");
-    // a*b - q*d - r = 0. Bigint enforces the complete integer relation using
-    // bounded limbs/carries, so multiples of the field modulus cannot disappear.
-    evaluate_quadratic_expression(
-        [[U256::from(a)], [U256::from(q)]],
-        [[false], [true]],
-        [[U256::from(b)], [U256::from(d)]],
-        [[false], [false]],
-        [U256::from(r)],
-        [true],
-    );
+
+    assert_eq((a as Field) * (b as Field), (q as Field) * (d as Field) + (r as Field));
+
+    // Low-limb residue: t = a0*b0 - q0*d0 - r0 lies in (-2^29, 2^28), so
+    // t + 2^29 is in (0, 2^30) and must equal 2^14 * m with m < 2^16.
+    let values = [a as Field, b as Field, q as Field, d as Field, r as Field];
+    // Safety: each split is constrained below to x = 2^14 * hi + lo with lo < 2^14
+    // and hi < 2^114, which fixes lo = x mod 2^14 for x < 2^128.
+    let (high, low) = unsafe { split_low_limbs(values) };
+    for i in 0..5 {
+        low[i].assert_max_bit_size::<14>();
+        high[i].assert_max_bit_size::<114>();
+        assert_eq(values[i], high[i] * 0x4000 + low[i]);
+    }
+    let t = low[0] * low[1] - low[2] * low[3] - low[4];
+    let m = (t + 0x20000000) / 0x4000;
+    m.assert_max_bit_size::<16>();
+}
+
+unconstrained fn split_low_limbs(values: [Field; 5]) -> ([Field; 5], [Field; 5]) {
+    let mut high = [0; 5];
+    let mut low = [0; 5];
+    for i in 0..5 {
+        let x = values[i] as u128;
+        high[i] = (x >> 14) as Field;
+        low[i] = (x & 0x3fff) as Field;
+    }
+    (high, low)
 }
 
 // Exercise the constraint boundary with supplied values, not the honest generator.
@@ -94,4 +114,10 @@ fn rejects_field_congruent_but_integer_wrong_witness() {
         18663543855022578254064320005638014508,
         91752719614413399769914463894048949800,
     ]);
+}
+
+#[test(should_fail)]
+fn rejects_limb_congruent_but_field_wrong_witness() {
+    // 7*9 - 4111*4 - 3 = -16384, a multiple of 2^14 that the Field equation rejects.
+    check_supplied([7, 9, 4, 4111, 3]);
 }
