@@ -16,17 +16,17 @@ This library requires Noir **v1.0.0** or later.
 
 ## Installation
 
-Add `mul_div` to your `Nargo.toml`. Add `bigint` as well if you use `MulDiv` with its `U256` type:
+Add `mul_div` to your `Nargo.toml`:
 
 ```toml
 [dependencies]
 mul_div = { git = "https://github.com/noir-lang/mul-div", tag = "master" }
-bigint = { git = "https://github.com/noir-lang/bigint", tag = "main" }
 ```
 
 ## API
 
-The `MulDiv` trait is implemented for `u8`, `u16`, `u32`, `u64`, `u128` and bigint's `U256`:
+The `MulDiv` trait is implemented for `u8`, `u16`, `u32`, `u64` and `u128`. It is a public trait, so
+other libraries can implement it for their own integer types.
 
 | Method | Result |
 | --- | --- |
@@ -35,16 +35,12 @@ The `MulDiv` trait is implemented for `u8`, `u16`, `u32`, `u64`, `u128` and bigi
 | `a.mul_div_rem(b, d)` | Floor quotient and remainder `(q, r)` |
 
 ```noir
-use bigint::{BigInt, U256};
 use mul_div::MulDiv;
 
 let (q, r) = 7_u128.mul_div_rem(9, 4);
 assert_eq(q, 15);
 assert_eq(r, 3);
 assert_eq(7_u128.mul_div_ceil(9, 4), 16);
-
-let maximum = U256::from_le_bytes([255; 32]);
-assert_eq(maximum.mul_div_floor(maximum, maximum), maximum);
 ```
 
 Multiply-divide preserves a product twice the operand width. It rejects a zero

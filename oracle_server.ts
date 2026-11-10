@@ -20,7 +20,6 @@ interface ForeignCallResult {
 }
 
 const U128_MAX = (1n << 128n) - 1n;
-const U256_MAX = (1n << 256n) - 1n;
 
 const app = express();
 app.use(cors());
@@ -44,8 +43,6 @@ function handleForeignCall(params: ForeignCallInfo[]): ForeignCallResult {
   switch (functionName) {
     case "mulDivU128":
       return mulDivU128(inputs);
-    case "mulDivU256":
-      return mulDivU256(inputs);
     case "mulDivSmall":
       return mulDivSmall(inputs);
     default:
@@ -89,20 +86,6 @@ function fromField(hex: ForeignCallParam): bigint {
   return BigInt("0x" + (hex || "0"));
 }
 
-// `[u8; 32]` little-endian bytes.
-function fromBytes(bytes: ForeignCallParam): bigint {
-  if (!Array.isArray(bytes) || bytes.length !== 32) throw new Error("expected [u8; 32]");
-  return bytes.reduceRight((acc, byte) => (acc << 8n) | fromField(byte), 0n);
-}
-
-function toBytes(value: bigint): string[] {
-  const bytes: string[] = [];
-  for (let i = 0; i < 32; i++) {
-    bytes.push(toField((value >> BigInt(8 * i)) & 0xffn));
-  }
-  return bytes;
-}
-
 function mulDivU128(inputs: ForeignCallParam[]): ForeignCallResult {
   const [a, b, d] = inputs.map(fromField);
   const result = reference(a, b, d, U128_MAX);
@@ -128,20 +111,6 @@ function mulDivSmall(inputs: ForeignCallParam[]): ForeignCallResult {
       toField(result.r),
       toField(result.ceilOk ? 1n : 0n),
       toField(result.ceil),
-    ],
-  };
-}
-
-function mulDivU256(inputs: ForeignCallParam[]): ForeignCallResult {
-  const [a, b, d] = inputs.map(fromBytes);
-  const result = reference(a, b, d, U256_MAX);
-  return {
-    values: [
-      toField(result.remOk ? 1n : 0n),
-      toBytes(result.q),
-      toBytes(result.r),
-      toField(result.ceilOk ? 1n : 0n),
-      toBytes(result.ceil),
     ],
   };
 }

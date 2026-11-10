@@ -4,4 +4,3 @@ type = "lib"
 compiler_version = ">=1.0.0"
 
 [dependencies]
-bigint = { git = "https://github.com/noir-lang/bigint", tag = "main" }

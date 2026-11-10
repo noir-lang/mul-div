@@ -8,8 +8,6 @@ This guide will discuss [Development](#development) setup and how the team handl
 
 ## Development
 
-`mul-div` depends on [`noir-lang/bigint`](https://github.com/noir-lang/bigint), which `nargo` fetches with `git`.
-
 Run the tests with `yarn install` followed by `./scripts/run.sh`. See the [README](README.md#testing) for details.
 
 ## Commits
