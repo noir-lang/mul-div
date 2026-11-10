@@ -74,7 +74,8 @@ Plain `nargo test` without `--oracle-resolver` fails on the oracle tests.
 
 ## Performance
 
-See [performance measurements](docs/performance.md) for a comparison with bigint's
-general multiply-divide.
+The Benchmarks workflow measures circuit size, ACIR opcodes and Brillig bytecode
+size for every operation in `src/benchmarks.nr`, and posts the per-function diff
+against `master` on each pull request.
 
 Based on [noir-library-starter](https://github.com/noir-lang/noir-library-starter).
