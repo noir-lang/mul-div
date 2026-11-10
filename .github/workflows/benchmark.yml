@@ -14,6 +14,8 @@ jobs:
     name: Benchmark library
     runs-on: ubuntu-latest
     permissions:
+      # actions permission so noir-gates-diff can download the gates report artifact from `master`
+      actions: write
       # deployments permission to deploy GitHub pages website
       deployments: write
       # contents permission to update benchmark contents in gh-pages branch
@@ -43,6 +45,13 @@ jobs:
         run: ./scripts/build-gates-report.sh
         env:
           BACKEND: /home/runner/.bb/bb
+
+      - name: Compare gates reports
+        id: gates_diff
+        uses: noir-lang/noir-gates-diff@dbe920a8dcc3370af4be4f702ca9cef29317bec1
+        with:
+          report: gates_report.json
+          summaryQuantile: 0.9 # only display the 10% most significant circuit size diffs in the summary (defaults to 20%)
 
       - name: Store ACIR opcode benchmark result
         uses: benchmark-action/github-action-benchmark@v1
@@ -77,6 +86,16 @@ jobs:
           max-items-in-chart: 50
           skip-fetch-gh-pages: true
 
+      - name: Add gates diff to sticky comment
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          # each diff is posted as its own comment
+          header: gates
+          # delete the comment in case changes no longer impact circuit sizes
+          delete: ${{ !steps.gates_diff.outputs.markdown }}
+          message: ${{ steps.gates_diff.outputs.markdown }}
+
       - name: Delete export files
         run: rm -rf export
 
@@ -85,6 +104,16 @@ jobs:
 
       - name: Generate brillig report
         run: ./scripts/build-brillig-report.sh
+
+      - name: Compare brillig reports
+        id: brillig_bytecode_diff
+        uses: noir-lang/noir-gates-diff@dbe920a8dcc3370af4be4f702ca9cef29317bec1
+        with:
+          report: brillig_report.json
+          header: |
+            # Changes to Brillig bytecode sizes
+          brillig_report: true
+          summaryQuantile: 0.9 # only display the 10% most significant bytecode size diffs in the summary (defaults to 20%)
 
       - name: Store brillig benchmark result
         uses: benchmark-action/github-action-benchmark@v1
@@ -102,3 +131,13 @@ jobs:
           fail-on-alert: false
           max-items-in-chart: 50
           skip-fetch-gh-pages: true
+
+      - name: Add brillig diff to sticky comment
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          # each diff is posted as its own comment
+          header: brillig
+          # delete the comment in case changes no longer impact bytecode sizes
+          delete: ${{ !steps.brillig_bytecode_diff.outputs.markdown }}
+          message: ${{ steps.brillig_bytecode_diff.outputs.markdown }}

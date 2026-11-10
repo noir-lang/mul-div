@@ -16,12 +16,11 @@ This library requires Noir **v1.0.0** or later.
 
 ## Installation
 
-`mul-div` and its `bigint` dependency are private repositories, so you need read
-access to both. From a sibling checkout, add these dependencies to your `Nargo.toml`:
+Add `mul_div` to your `Nargo.toml`. Add `bigint` as well if you use `MulDiv` with its `U256` type:
 
 ```toml
 [dependencies]
-mul_div = { path = "../mul-div" }
+mul_div = { git = "https://github.com/noir-lang/mul-div", tag = "master" }
 bigint = { git = "https://github.com/noir-lang/bigint", tag = "main" }
 ```
 

@@ -8,7 +8,7 @@ This guide will discuss [Development](#development) setup and how the team handl
 
 ## Development
 
-`mul-div` depends on the private [`noir-lang/bigint`](https://github.com/noir-lang/bigint) repository. `nargo` fetches it with `git`, so your GitHub git credentials (SSH or a credential helper) need read access to both repositories.
+`mul-div` depends on [`noir-lang/bigint`](https://github.com/noir-lang/bigint), which `nargo` fetches with `git`.
 
 Run the tests with `yarn install` followed by `./scripts/run.sh`. See the [README](README.md#testing) for details.
 
