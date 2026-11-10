@@ -5,6 +5,7 @@ on:
     branches:
       - master
   pull_request:
+  workflow_dispatch:
 
 env:
   MINIMUM_NOIR_VERSION: 1.0.0
@@ -48,6 +49,8 @@ jobs:
 
       - name: Compare gates reports
         id: gates_diff
+        # Fails when `master` has no gates report artifact yet; the report is still uploaded for later runs
+        continue-on-error: true
         uses: noir-lang/noir-gates-diff@dbe920a8dcc3370af4be4f702ca9cef29317bec1
         with:
           report: gates_report.json
@@ -107,6 +110,8 @@ jobs:
 
       - name: Compare brillig reports
         id: brillig_bytecode_diff
+        # Fails when `master` has no Brillig report artifact yet; the report is still uploaded for later runs
+        continue-on-error: true
         uses: noir-lang/noir-gates-diff@dbe920a8dcc3370af4be4f702ca9cef29317bec1
         with:
           report: brillig_report.json
