@@ -18,10 +18,14 @@ This library requires Noir **v1.0.0** or later.
 
 Add `mul_div` to your `Nargo.toml`:
 
+<!-- x-release-please-start-version -->
+
 ```toml
 [dependencies]
-mul_div = { git = "https://github.com/noir-lang/mul-div", tag = "master" }
+mul_div = { git = "https://github.com/noir-lang/mul-div", tag = "v0.0.0" }
 ```
+
+<!-- x-release-please-end -->
 
 ## API
 
