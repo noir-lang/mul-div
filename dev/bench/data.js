@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794512846864,
+  "lastUpdate": 1794512848394,
   "repoUrl": "https://github.com/noir-lang/mul-div",
   "entries": {
     "ACIR Opcodes": [
@@ -1721,6 +1721,105 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/noir-lang/mul-div/commit/07973c5742f32cd01a6484bfd86aa5cee5e5fe5b"
         },
         "date": 1794484948786,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "bench_u128_mul_div_ceil.json/main",
+            "value": 2879,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u128_mul_div_floor.json/main",
+            "value": 2851,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u128_mul_div_rem.json/main",
+            "value": 2853,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u16_mul_div_ceil.json/main",
+            "value": 2798,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u16_mul_div_floor.json/main",
+            "value": 2779,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u16_mul_div_rem.json/main",
+            "value": 2781,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u32_mul_div_ceil.json/main",
+            "value": 2802,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u32_mul_div_floor.json/main",
+            "value": 2783,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u32_mul_div_rem.json/main",
+            "value": 2785,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u64_mul_div_ceil.json/main",
+            "value": 2857,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u64_mul_div_floor.json/main",
+            "value": 2833,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u64_mul_div_rem.json/main",
+            "value": 2835,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u8_mul_div_ceil.json/main",
+            "value": 102,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u8_mul_div_floor.json/main",
+            "value": 84,
+            "unit": "circuit_size"
+          },
+          {
+            "name": "bench_u8_mul_div_rem.json/main",
+            "value": 86,
+            "unit": "circuit_size"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "olehmisar@gmail.com",
+            "name": "Oleh Misarosh",
+            "username": "olehmisar"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "fddd97e2e56d0644f48cdac79b39f5e1b1cf51b5",
+          "message": "fix: name the AsPrimitive<Field> conversion in mul_div_rem (#23)\n\n`T` has both `AsPrimitive<u128>` and `AsPrimitive<Field>`, and nargo 1.0.0-rc.3 (Aztec v6) cannot pick the impl from the `Field` annotation alone\n(\"Expected type Field, found type u128\"), so the crate does not compile there. Naming the trait compiles on every version and changes nothing else.\n\n\nClaude-Session: https://claude.ai/code/session_01DEfgvwpmCw9u1S37TXW4yN\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+          "timestamp": "2026-11-12T19:46:16Z",
+          "tree_id": "5d708ce319c41e6082cfc25ca978a60e6af00641",
+          "url": "https://github.com/noir-lang/mul-div/commit/fddd97e2e56d0644f48cdac79b39f5e1b1cf51b5"
+        },
+        "date": 1794512848384,
         "tool": "customSmallerIsBetter",
         "benches": [
           {
