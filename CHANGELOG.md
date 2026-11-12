@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0-rc.2](https://github.com/noir-lang/mul-div/compare/v0.1.0-rc.1...v0.1.0-rc.2) (2026-11-12)
+
+
+### Bug Fixes
+
+* Name the AsPrimitive&lt;Field&gt; conversion in mul_div_rem ([#23](https://github.com/noir-lang/mul-div/issues/23)) ([fddd97e](https://github.com/noir-lang/mul-div/commit/fddd97e2e56d0644f48cdac79b39f5e1b1cf51b5))
+
 ## 0.1.0-rc.1 (2026-11-12)
 
 
