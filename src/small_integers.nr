@@ -33,11 +33,11 @@ where
     // Safety: constrained callers check the integer relation and bounds below.
     let (q, r) = unsafe { div_rem_hint(a, b, d, max) };
     if !std::runtime::is_unconstrained() {
-        let a_field: Field = a.as_();
-        let b_field: Field = b.as_();
-        let d_field: Field = d.as_();
-        let q_field: Field = q.as_();
-        let r_field: Field = r.as_();
+        let a_field: Field = AsPrimitive::<Field>::as_(a);
+        let b_field: Field = AsPrimitive::<Field>::as_(b);
+        let d_field: Field = AsPrimitive::<Field>::as_(d);
+        let q_field: Field = AsPrimitive::<Field>::as_(q);
+        let r_field: Field = AsPrimitive::<Field>::as_(r);
         assert(d != T::from(0), "mul_div: zero denominator");
         assert(r < d, "mul_div: remainder out of range");
         assert_eq(a_field * b_field, q_field * d_field + r_field);
